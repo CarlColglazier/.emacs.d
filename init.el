@@ -1,6 +1,6 @@
 ;; Welcome to my Emacs config! A lot of this was added ad-hoc over time
 ;; or copied from places on the web. Feel free to do likewise.
-;;     -- Carl Colglazier
+;;     -- Carl
 
 ;; This contains all the initialization files.
 ;; Better organized that way.
@@ -17,13 +17,14 @@
     "After FEATURE is loaded, evaluate BODY."
     (declare (indent defun))
     `(eval-after-load ,feature
-'(progn ,@body))))
+       '(progn ,@body))))
 
 (setq ispell-program-name "/usr/local/bin/aspell")
 
 (require 'init-themes)
 (require 'init-osx)
 (require 'init-org)
+(require 'init-projectile)
 
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 (add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; assuming you are using a dark theme
@@ -31,9 +32,9 @@
 (setq frame-title-format nil)
 
 (setq backup-directory-alist
-`((".*" . ,temporary-file-directory)))
+      `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
-`((".*" ,temporary-file-directory t)))
+      `((".*" ,temporary-file-directory t)))
 
 ;;----------------------------------------------------------------------------
 ;; Variables configured via the interactive 'customize' interface
@@ -46,6 +47,17 @@
 (when (or (memq window-system '(mac ns x))
           (unless (memq system-type '(ms-dos windows-nt))
             (daemonp)))
-(exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize))
+
+;; Autoload files.
+(global-auto-revert-mode t)
+
+;; Show the column number
+(column-number-mode)
+
+(set-face-attribute 'default nil :height 140)
+
+(when (member "DejaVu Sans Mono" (font-family-list))
+  (set-default-font "DejaVu Sans Mono"))
 
 (provide 'init)
