@@ -25,6 +25,7 @@
 (require 'init-osx)
 (require 'init-org)
 (require 'init-projectile)
+(require 'init-web)
 
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 (add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; assuming you are using a dark theme
