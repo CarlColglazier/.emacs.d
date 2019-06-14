@@ -19,7 +19,10 @@
     `(eval-after-load ,feature
        '(progn ,@body))))
 
-(setq ispell-program-name "/usr/local/bin/aspell")
+(when *is-a-mac*
+  (setq ispell-program-name "/usr/local/bin/aspell"))
+(when (not *is-a-mac*)
+  (setq ispell-program-name "/usr/bin/aspell"))
 
 (require 'init-themes)
 (require 'init-osx)
@@ -60,5 +63,11 @@
 
 (when (member "DejaVu Sans Mono" (font-family-list))
   (set-default-font "DejaVu Sans Mono"))
+
+(maybe-require-package 'ox-hugo)
+(when (maybe-require-package 'magit)
+  (global-set-key (kbd "C-c g") 'magit-status))
+
+(setq browse-url-browser-function 'eww-browse-url)
 
 (provide 'init)
