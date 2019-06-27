@@ -70,4 +70,21 @@
 
 (setq browse-url-browser-function 'eww-browse-url)
 
+(require-package 'company)
+(require 'company)
+(add-hook 'after-init-hook 'global-company-mode)
+(add-to-list 'company-backends 'company-tern)
+
+(when (require-package 'go-mode)
+  (autoload 'go-mode "go-mode" nil t)
+  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+
+  (defun go-mode-setup ()
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    (define-key (current-local-map) "\C-c\C-c" 'compile)
+    )
+
+  (add-hook 'go-mode-hook 'go-mode-setup)
+  )
+
 (provide 'init)
