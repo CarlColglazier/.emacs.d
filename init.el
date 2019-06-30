@@ -87,4 +87,6 @@
   (add-hook 'go-mode-hook 'go-mode-setup)
   )
 
+(maybe-require-package 'elfeed)
+
 (provide 'init)

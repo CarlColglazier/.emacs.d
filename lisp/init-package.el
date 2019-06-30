@@ -80,7 +80,7 @@ locate PACKAGE."
             (lambda () (package--save-selected-packages
                    (seq-uniq (append carl/required-packages package-selected-packages))))))
 
-(require-package 'fullframe)
-(fullframe list-packages quit-window)
+(when (maybe-require-package 'fullframe)
+  (fullframe list-packages quit-window))
 
 (provide 'init-package)
