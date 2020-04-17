@@ -1,6 +1,28 @@
 
 (maybe-require-package 'olivetti)
 
+(when (require-package 'org-ref)
+	(setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib"))
+	;; see org-ref for use of these variables
+	(setq org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
+				org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
+				org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/")
+	;(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+	(require 'org-ref)
+;	(require 'org-ref-ox-hugo)
+	)
+
+(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
+(add-to-list 'org-latex-classes
+             '("chicago"
+               "\\documentclass{turabian-researchpaper}"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
 (define-minor-mode prose-mode
   "Set up a buffer for prose editing.
 This enables or modifies a number of settings so that the
@@ -37,5 +59,11 @@ typical word processor."
     (visual-line-mode -1)
     (when (fboundp 'olivetti-mode)
       (olivetti-mode 0))))
+
+;; active Babel languages
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ruby . t)))
+   
 
 (provide 'init-org)

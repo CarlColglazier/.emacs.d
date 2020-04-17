@@ -2,14 +2,62 @@
 ;; or copied from places on the web. Feel free to do likewise.
 ;;     -- Carl
 
+
+;(server-start) 
+
 ;; This contains all the initialization files.
 ;; Better organized that way.
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/")
+
+
+;; The rest of the file.
+(require 'sclang)
 
 (defconst *is-a-mac* (eq system-type 'darwin))
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (require 'init-package)
+
+(require-package 'use-package)
+
+;; Set up use-package
+;; This is only needed once, near the top of the file
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  ;(add-to-list 'load-path "<path where use-package is installed>")
+  (require 'use-package))
+
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook (go-mode . lsp-deferred))
+
+;; Set up before-save hooks to format buffer and add/delete imports.
+;; Make sure you don't have other gofmt/goimports hooks enabled.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;; Optional - provides fancier overlays.
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+;; Company mode is a standard completion package that works well with lsp-mode.
+(use-package company
+  :ensure t
+  :config
+  ;; Optionally enable completion-as-you-type behavior.
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1))
+
+;; company-lsp integrates company mode completion with lsp-mode.
+;; completion-at-point also works out of the box but doesn't support snippets.
+(use-package company-lsp
+						 :ensure t
+						 :commands company-lsp)
 
 (if (fboundp 'with-eval-after-load)
     (defalias 'after-load 'with-eval-after-load)
@@ -29,6 +77,7 @@
 (require 'init-org)
 (require 'init-projectile)
 (require 'init-web)
+(provide 'init-flycheck)
 
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 (add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; assuming you are using a dark theme
@@ -70,10 +119,22 @@
 
 (setq browse-url-browser-function 'eww-browse-url)
 
-(require-package 'company)
-(require 'company)
-(add-hook 'after-init-hook 'global-company-mode)
-(add-to-list 'company-backends 'company-tern)
+;; Set up LSP
+;(when (require-package 'lsp-mode)
+;	(require-package 'lsp-ui)
+;	(require-package 'company-lsp)
+;	)
+
+(when (maybe-require-package 'company)
+;(require 'company)
+  (add-hook 'after-init-hook 'global-company-mode)
+  (require-package 'company-tern)
+  ;(add-to-list 'company-backends 'company-tern)
+  ;(dolist (backend '(company-eclim company-semantic))
+  ;  (delq backend company-backends))
+  ; TODO: dmininish
+  )
+ 
 
 (when (require-package 'go-mode)
   (autoload 'go-mode "go-mode" nil t)
@@ -88,5 +149,15 @@
   )
 
 (maybe-require-package 'elfeed)
+
+(require-package 'tidal)
+(setq tidal-boot-script-path "~/krepovo/tidal/BootTidal.hs")
+
+(setq-default tab-width 2)
+
+(unless (package-installed-p 'inf-ruby)
+  (package-install 'inf-ruby))
+
+(require-package 'rust-mode)
 
 (provide 'init)
