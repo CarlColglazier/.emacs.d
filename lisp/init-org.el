@@ -80,7 +80,6 @@ typical word processor."
  'org-babel-load-languages
  '((python . t)
 	 (shell . t)
-   (ipython . t)
  ))
 
 ;; https://emacs.stackexchange.com/questions/53383/python-shell-warning-about-readline-and-completion
