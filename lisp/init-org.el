@@ -1,5 +1,6 @@
-
 (maybe-require-package 'olivetti)
+
+(require 'ob-async)
 
 (when (require-package 'org-ref)
 	(setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib"))
@@ -17,6 +18,18 @@
 (add-to-list 'org-latex-classes
              '("chicago"
                "\\documentclass{turabian-researchpaper}"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+(add-to-list 'org-latex-classes
+						 '("acm"
+							 "\\documentclass{acmart}")
+						 )
+(add-to-list 'org-latex-classes
+						 '("tufte-handout"
+							 "\\documentclass{tufte-handout}"
                ("\\section{%s}" . "\\section*{%s}")
                ("\\subsection{%s}" . "\\subsection*{%s}")
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
@@ -63,7 +76,14 @@ typical word processor."
 ;; active Babel languages
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((ruby . t)))
-   
+ '((python . t)
+	 (shell . t)
+   (ipython . t)
+ ))
+
+;; https://emacs.stackexchange.com/questions/53383/python-shell-warning-about-readline-and-completion
+(setq python-shell-completion-native-enable nil)
+
+(setq org-export-allow-bind-keywords t)
 
 (provide 'init-org)
