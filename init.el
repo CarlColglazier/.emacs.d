@@ -26,7 +26,7 @@
   ;(add-to-list 'load-path "<path where use-package is installed>")
   (require 'use-package))
 
-(defvar *use-lsp* (not (version< "26.0")))
+(defvar *use-lsp* (>= emacs-major-version 26))
 
 (when *use-lsp*
 	(use-package lsp-mode
