@@ -1,6 +1,8 @@
 (maybe-require-package 'olivetti)
 
-(require 'ob-async)
+(when (require-package 'ob-async)
+	(require 'ob-async)
+	)
 
 (when (require-package 'org-ref)
 	(setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib"))
