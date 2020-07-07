@@ -26,7 +26,7 @@
   ;(add-to-list 'load-path "<path where use-package is installed>")
   (require 'use-package))
 
-(defconst *use-lsp* (not (version< "26")))
+(defvar *use-lsp* (not (version< "26.0")))
 
 (when *use-lsp*
 	(use-package lsp-mode
