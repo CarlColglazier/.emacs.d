@@ -2,7 +2,7 @@
 
 (when (>= emacs-major-version 26)
 	(when (require-package 'ob-async)
-		(require 'ob-async))
+		(require 'ob-async)))
 
 (when (require-package 'org-ref)
 	(setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib"))
