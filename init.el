@@ -106,7 +106,7 @@
 
 (when (maybe-require-package 'company)
 	(add-hook 'after-init-hook 'global-company-mode)
-	(require-package 'company-tern))
+	(maybe-require-package 'company-tern))
  
 
 (when (require-package 'go-mode)
