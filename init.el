@@ -97,8 +97,8 @@
 
 (set-face-attribute 'default nil :height 140)
 
-(when (member "DejaVu Sans Mono" (font-family-list))
-	(set-default-font "DejaVu Sans Mono"))
+;;(when (member "DejaVu Sans Mono" (font-family-list))
+;;	(set-default-font "DejaVu Sans Mono"))
 
 (maybe-require-package 'ox-hugo)
 (when (maybe-require-package 'magit)
@@ -107,7 +107,7 @@
 (when (maybe-require-package 'company)
 	(add-hook 'after-init-hook 'global-company-mode)
 	(maybe-require-package 'company-tern))
- 
+
 
 (when (require-package 'go-mode)
 	(autoload 'go-mode "go-mode" nil t)
@@ -182,5 +182,17 @@
 ; https://www.birkelbach.eu/post/dealing-with-empty-menus-in-gnu-emacs/
 (menu-bar-mode -1)
 (menu-bar-mode 1)
+
+
+		;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph		 
+		(defun unfill-paragraph (&optional region)
+			"Takes a multi-line paragraph and makes it into a single line of text."
+			(interactive (progn (barf-if-buffer-read-only) '(t)))
+			(let ((fill-column (point-max))
+						;; This would override `fill-column' if it's an integer.
+						(emacs-lisp-docstring-fill-column t))
+				(fill-paragraph nil region)))
+
+(define-key global-map "\M-Q" 'unfill-paragraph)
 
 (provide 'init)
