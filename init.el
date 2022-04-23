@@ -53,9 +53,9 @@
 
 	;; company-lsp integrates company mode completion with lsp-mode.
 	;; completion-at-point also works out of the box but doesn't support snippets.
-	(use-package company-lsp
-						 :ensure t
-						 :commands company-lsp)
+	;(use-package company-lsp
+	;					 :ensure t
+	;					 :commands company-lsp)
 	)
 
 (if (fboundp 'with-eval-after-load)
@@ -67,7 +67,7 @@
 			 '(progn ,@body))))
 
 (when *is-a-mac*
-	(setq ispell-program-name "/usr/local/bin/aspell"))
+	(setq ispell-program-name "/opt/homebrew/bin/aspell"))
 (when (not *is-a-mac*)
 	(setq ispell-program-name "/usr/bin/aspell"))
 
@@ -154,7 +154,7 @@
 
 ;; Language-Specific Tweaks
 (setq-default python-indent-offset custom-tab-width) ;; Python
-(setq-default js-indent-level custom-tab-width)			 ;; Javascript
+(setq-default js-indent-level custom-tab-width)      ;; Javascript
 
 ;; Making electric-indent behave sanely
 (setq-default electric-indent-inhibit t)
@@ -184,15 +184,61 @@
 (menu-bar-mode 1)
 
 
-		;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph		 
-		(defun unfill-paragraph (&optional region)
-			"Takes a multi-line paragraph and makes it into a single line of text."
-			(interactive (progn (barf-if-buffer-read-only) '(t)))
-			(let ((fill-column (point-max))
-						;; This would override `fill-column' if it's an integer.
-						(emacs-lisp-docstring-fill-column t))
-				(fill-paragraph nil region)))
+;;; Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph		 
+(defun unfill-paragraph (&optional region)
+	"Takes a multi-line paragraph and makes it into a single line of text."
+	(interactive (progn (barf-if-buffer-read-only) '(t)))
+	(let ((fill-column (point-max))
+				;; This would override `fill-column' if it's an integer.
+				(emacs-lisp-docstring-fill-column t))
+		(fill-paragraph nil region)))
 
 (define-key global-map "\M-Q" 'unfill-paragraph)
+
+(use-package vertico
+	:ensure
+	:init
+	(vertico-mode)
+)
+
+(use-package orderless
+	:ensure t
+	:custom
+	(completion-styles '(orderless basic))
+	(completion-category-overrides '((file (styles basic partial-completion)))))
+
+;; citar
+
+(setq org-cite-csl-styles-dir "~/Zotero/styles")
+
+(defvar my-bib-files '("~/Dropbox/bibliography/references.json"
+											 "~/Dropbox/bibliography/cdsc.json"))
+
+
+(use-package citar
+	:ensure t
+	:custom
+	 (citar-bibliography (symbol-value 'my-bib-files))
+	(org-cite-global-bibliography (symbol-value 'my-bib-files))
+	(org-cite-insert-processor 'citar)
+	(org-cite-follow-processor 'citar)
+	(org-cite-activate-processor 'citar)
+	(citar-bibliography org-cite-global-bibliography)
+
+	(citar-filenotify-setup '(LaTeX-mode-hook org-mode-hook))
+	;; optional: org-cite-insert is also bound to C-c C-x C-@
+	:bind
+	(:map org-mode-map :package org ("C-c b" . #'org-cite-insert)))
+
+(use-package vterm
+		:ensure t)
+
+(use-package tex
+	:ensure auctex
+	:init
+	)
+
+(use-package julia-mode
+	:ensure t)
 
 (provide 'init)

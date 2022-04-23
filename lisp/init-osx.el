@@ -3,9 +3,13 @@
 	(add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; assuming you are using a dark theme
 	(setq ns-use-proxy-icon nil)
 	(setq frame-title-format nil)
-	
-  (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier 'none)
+
+  ;; Set up the keys
+  ;; The default ones on mac feel very backwards to me.
+  ;(setq mac-control-modifier 'control)
+  ;(setq mac-command-modifier 'control)
+  ;(setq mac-option-modifier 'meta)
+  ;(setq mac-right-option-modifier 'control)
   ;; Make mouse wheel / trackpad scrolling less jerky
   (setq mouse-wheel-scroll-amount '(1
                                     ((shift) . 5)

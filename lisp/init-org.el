@@ -4,19 +4,28 @@
   (when (require-package 'ob-async)
     (require 'ob-async)))
 
-(when (require-package 'org-ref)
-  (setq reftex-default-bibliography '("~/Dropbox/bibliography/references.bib"))
-  ;; see org-ref for use of these variables
-  (setq org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
-        org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
-        org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/")
-  (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
-  (require 'org-ref)
-;  (require 'org-ref-ox-hugo)
-  )
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/Dropbox/notes"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
 
 ;(setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 
+(use-package ox-latex
+  :config
 (add-to-list 'org-latex-classes
   '("chicago"
     "\\documentclass{turabian-researchpaper}"
@@ -56,14 +65,14 @@
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-(require 'ox-latex)
+
 (add-to-list 'org-latex-classes
              '("beamer"
                "\\documentclass\[presentation\]\{beamer\}"
                ("\\section\{%s\}" . "\\section*\{%s\}")
                ("\\subsection\{%s\}" . "\\subsection*\{%s\}")
                ("\\subsubsection\{%s\}" . "\\subsubsection*\{%s\}")))
-
+)
 ;; active Babel languages
 (org-babel-do-load-languages
  'org-babel-load-languages
